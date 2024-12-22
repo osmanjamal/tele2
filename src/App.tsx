@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react';
-import { WebApp } from '@twa-dev/sdk';
 import { CategoryList } from './components/CategoryList';
 import { MenuList } from './components/MenuList';
 import { OrderStatus } from './components/OrderStatus';
 import { useStore } from './store/useStore';
+import { initTelegramWebApp } from './lib/telegram';
 
 function App() {
   useEffect(() => {
-    // Initialize Telegram Web App
-    WebApp.ready();
-    
-    // Set up the main button
-    WebApp.MainButton.setText('View Cart');
-    WebApp.MainButton.onClick(() => {
-      // Handle cart view
-    });
+    // تأخير تهيئة تيليجرام حتى يتم تحميل المكونات
+    const timeoutId = setTimeout(() => {
+      try {
+        initTelegramWebApp();
+      } catch (error) {
+        console.error('Error initializing Telegram WebApp in App:', error);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
